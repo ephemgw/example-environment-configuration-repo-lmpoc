@@ -1,0 +1,45 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: gateway-dev
+  namespace: dev
+  annotations:
+    flux.weave.works/automated: "true"          # Flux to deploy new gateway image automatically 11
+    flux.weave.works/tag.container: semver:*
+spec:
+  releaseName: gateway-dev
+  forceUpgrade: true
+  chart:
+    git: git@github.com:lm-apim-poc/gateway-helm-charts   # Public Git Username, e.g. git@github.com:gituser/gateway-helm-charts
+    path: charts/gateway
+    ref: master
+  valuesFrom:
+  - secretKeyRef:
+      name: image-creds
+      key: image-creds.yaml
+  - secretKeyRef:
+      name: gateway-license
+      key: license.yaml
+  - secretKeyRef:
+      name: env
+      key: env.yaml
+  values:
+    replicaCount: 1
+    container:
+      image: docker.<yourSubDomain>.layer7.broadcom.com/repository/docker-hosted/gateway                                      # Repository name, e.g docker.cluster1.example.com/repository/docker-hosted/gateway
+      tag: '1'                                      # Image tag version, e.g 1.0
+    imageCredentials:
+      name: "gateway-dev"                               # Image credential name, e.g gateway.name-example01
+      registry: "docker.<yourSubDomain>.layer7.broadcom.com"                                   # Registry name, e.g docker.cluster1.example.com
+      username: "admin"                               # Registry username, e.g dockerUser
+    hazelcast:
+      enabled: false
+    service:
+      ports:
+      - name: http
+        internal: 8080
+        external: 80
+      - name: https
+        internal: 8443
+        external: 443
