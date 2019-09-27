@@ -1,0 +1,4 @@
+ssl:
+  keystore: "Generic"
+  algorithm: "RSA"
+  keyPassword: "7layer"
