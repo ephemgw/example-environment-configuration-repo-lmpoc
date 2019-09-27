@@ -1,0 +1,9 @@
+gwname.yoursubdomain.layer7.broadcom.com.client:
+  verifyHostname: false
+  trustedForSsl: true
+  trustedAsSamlAttestingEntity: true
+  trustAnchor: true
+  revocationCheckingEnabled: true
+  trustedForSigningClientCerts: true
+  trustedForSigningServerCerts: true
+  trustedAsSamlIssuer: true
